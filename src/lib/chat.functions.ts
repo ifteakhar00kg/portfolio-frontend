@@ -1,5 +1,6 @@
 import { createServerFn } from "@tanstack/react-start";
 import { z } from "zod";
+import { API_BASE_URL } from "./api-config";
 
 // মেসেজ স্কিমা ঠিক রাখা হলো
 const MessageSchema = z.object({
@@ -15,8 +16,7 @@ export const chatWithIfteakarBot = createServerFn({ method: "POST" })
   .inputValidator((input: unknown) => InputSchema.parse(input))
   .handler(async ({ data }) => {
     try {
-      // আপনার ব্যাকএন্ড কন্ট্রোলারের রিয়েল এন্ডপয়েন্ট (Port: 8083)
-      const res = await fetch("http://localhost:8083/api/v1/chat", {
+      const res = await fetch(`${API_BASE_URL}/api/v1/chat`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
