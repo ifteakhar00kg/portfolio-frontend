@@ -1,9 +1,6 @@
 {
+  "version": 2,
   "framework": "vite",
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/"
-    }
-  ]
+  "buildCommand": "bun run build",
+  "outputDirectory": ".output"
 }
