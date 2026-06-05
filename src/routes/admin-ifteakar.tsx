@@ -1,6 +1,7 @@
 import { createFileRoute } from "@tanstack/react-router";
 import { useState } from "react";
 import { Plus, Loader2, CheckCircle2 } from "lucide-react";
+import { API_BASE_URL } from "@/lib/api-config";
 
 export const Route = createFileRoute("/admin-ifteakar")({
   component: AdminDashboard,
@@ -21,7 +22,7 @@ function AdminDashboard() {
     setStatus("sending");
 
     try {
-      const response = await fetch("http://localhost:8083/api/v1/projects", {
+      const response = await fetch(`${API_BASE_URL}/api/v1/projects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
