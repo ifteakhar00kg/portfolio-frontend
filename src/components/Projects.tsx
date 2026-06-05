@@ -5,12 +5,11 @@ import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import { RevealText, StaggerGroup, StaggerItem, staggerContainer, staggerItem } from "./Reveal";
 import { LoopingTypewriter } from "./LoopingTypewriter";
 
-// ব্যাকএন্ডের মডেলের সাথে মিল রেখে টাইপ
 interface Project {
   id: number;
   title: string;
   description: string;
-  technologies: string; // ব্যাকএন্ড থেকে কমা-সেপারেটেড স্ট্রিং আসে
+  technologies: string; 
   githubLink: string;
   liveLink: string;
 }
@@ -81,8 +80,8 @@ export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    // আপনার ব্যাকএন্ডের এন্ডপয়েন্ট
-    fetch("http://localhost:8083/api/v1/projects")
+    // সরাসরি রেন্ডারের লাইভ এপিআই ইউআরএল হার্ডকোড করে দেওয়া হলো
+    fetch("https://ifteakar-portfolio-backend.onrender.com/api/v1/projects")
       .then((res) => res.json())
       .then((data) => setProjects(data))
       .catch((err) => console.error("Error loading projects:", err));
