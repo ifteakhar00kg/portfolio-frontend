@@ -8,8 +8,8 @@ interface ContactModalProps {
 }
 
 const EMAIL = "ifteakarahmed.kg@gmail.com";
-// আপনার আসল ব্যাকএন্ড এন্ডপয়েন্ট পাথ অনুযায়ী ঠিক করে দেওয়া হলো
-const API_URL = "http://localhost:8083/api/v1/contact"; 
+// ভ্যারিয়েবলের সব ঝামেলা বাদ দিয়ে সরাসরি রেন্ডারের লাইভ লিঙ্ক বসিয়ে দেওয়া হলো
+const API_URL = "https://ifteakar-portfolio-backend.onrender.com/api/v1/contact";
 
 export function ContactModal({ open, onClose }: ContactModalProps) {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
@@ -45,7 +45,7 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
 
       const data = await response.json();
 
-      // আপনার ব্যাকএন্ডের রেসপন্স বডি { success: true/false } চেক করা হচ্ছে
+      // ব্যাকএন্ডের রেসপন্স বডি { success: true/false } চেক করা হচ্ছে
       if (response.ok && data.success) {
         setStatus("success");
 
@@ -60,8 +60,7 @@ export function ContactModal({ open, onClose }: ContactModalProps) {
       
     } catch (error) {
       console.error("Contact API Error:", error);
-      setStatus("error");
-      setSending(false);
+      setStatus("error"); // এখানে আগে ভুল করে setSending(false) দেওয়া ছিল, তা ঠিক করা হলো
     }
   };
 
