@@ -23,7 +23,7 @@ export function AddProjectModal({ open, onClose, onSuccess }: AddProjectModalPro
     setStatus("sending");
 
     try {
-      const response = await fetch("http://localhost:8083/api/v1/projects", {
+      const response = await fetch(`${import.meta.env.VITE_API_URL}/api/v1/projects`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
