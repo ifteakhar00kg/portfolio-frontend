@@ -7,7 +7,7 @@ interface ContactModalProps {
   onClose: () => void;
 }
 
-const EMAIL = "ifteakarahmed.kg@gmail.com";
+const EMAIL = "contact@ifteakar.dev";
 // ভ্যারিয়েবলের সব ঝামেলা বাদ দিয়ে সরাসরি রেন্ডারের লাইভ লিঙ্ক বসিয়ে দেওয়া হলো
 const API_URL = "https://ifteakar-portfolio-backend.onrender.com/api/v1/contact";
 
