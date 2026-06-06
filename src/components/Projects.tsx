@@ -3,6 +3,7 @@ import { useRef, MouseEvent, useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import { RevealText, StaggerGroup, StaggerItem, staggerContainer, staggerItem } from "./Reveal";
+import { LoopingTypewriter } from "./LoopingTypewriter";
 
 interface Project {
   id: number;
@@ -13,36 +14,61 @@ interface Project {
   liveLink: string;
 }
 
-// TiltCard কম্পোনেন্টটি একই থাকল
 function TiltCard({ project, index }: { project: Project; index: number }) {
   const ref = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
   const y = useMotionValue(0);
+
   const rotateX = useSpring(useTransform(y, [-0.5, 0.5], [8, -8]), { stiffness: 200, damping: 20 });
   const rotateY = useSpring(useTransform(x, [-0.5, 0.5], [-8, 8]), { stiffness: 200, damping: 20 });
+
   const handleMove = (e: MouseEvent<HTMLDivElement>) => {
     const rect = ref.current?.getBoundingClientRect();
     if (!rect) return;
     x.set((e.clientX - rect.left) / rect.width - 0.5);
     y.set((e.clientY - rect.top) / rect.height - 0.5);
   };
+
   const handleLeave = () => { x.set(0); y.set(0); };
 
   return (
     <motion.div variants={staggerItem} style={{ perspective: 1200 }}>
-      <motion.div ref={ref} onMouseMove={handleMove} onMouseLeave={handleLeave} style={{ rotateX, rotateY, transformStyle: "preserve-3d" }} className="group relative h-full rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-8 md:p-10 backdrop-blur-sm transition-shadow duration-500 hover:border-primary/40 hover:shadow-[0_0_60px_-10px_var(--primary)]">
+      <motion.div
+        ref={ref}
+        onMouseMove={handleMove}
+        onMouseLeave={handleLeave}
+        style={{ rotateX, rotateY, transformStyle: "preserve-3d" }}
+        className="group relative h-full rounded-2xl border border-foreground/10 bg-foreground/[0.02] p-8 md:p-10 backdrop-blur-sm transition-shadow duration-500 hover:border-primary/40 hover:shadow-[0_0_60px_-10px_var(--primary)]"
+      >
         <div style={{ transform: "translateZ(40px)" }} className="relative flex h-full flex-col">
           <div className="flex items-start justify-between mb-6">
-            <span className="text-xs uppercase tracking-[0.25em] text-primary/80">0{index + 1} / API</span>
-            <div className="rounded-full border border-foreground/15 p-2 text-foreground/70 group-hover:border-primary group-hover:text-neon"><ArrowUpRight size={16} /></div>
+            <span className="text-xs uppercase tracking-[0.25em] text-primary/80">
+              0{index + 1} / API
+            </span>
+            <div className="rounded-full border border-foreground/15 p-2 text-foreground/70 group-hover:border-primary group-hover:text-neon">
+              <ArrowUpRight size={16} />
+            </div>
           </div>
-          <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 group-hover:text-neon transition-colors">{project.title}</h3>
+          <h3 className="text-3xl md:text-4xl font-bold tracking-tight mb-4 group-hover:text-neon transition-colors">
+            {project.title}
+          </h3>
           <p className="text-foreground/70 mb-8 leading-relaxed">{project.description}</p>
           <div className="flex flex-wrap gap-2 mb-8">
-            {project.technologies?.split(",").map((s) => (<span key={s} className="px-3 py-1 rounded-full border border-foreground/10 text-xs text-foreground/70">{s.trim()}</span>))}
+            {project.technologies.split(",").map((s) => (
+              <span key={s} className="px-3 py-1 rounded-full border border-foreground/10 text-xs text-foreground/70">
+                {s.trim()}
+              </span>
+            ))}
           </div>
           <div className="mt-auto">
-            <a href={project.liveLink || project.githubLink || "#"} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/10 px-5 py-2.5 text-sm font-medium text-neon transition-all hover:bg-primary hover:text-primary-foreground">View Project <ArrowUpRight size={14} /></a>
+            <a
+              href={project.liveLink || project.githubLink || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 rounded-full border border-primary/60 bg-primary/10 px-5 py-2.5 text-sm font-medium text-neon transition-all hover:bg-primary hover:text-primary-foreground"
+            >
+              View Project <ArrowUpRight size={14} />
+            </a>
           </div>
         </div>
       </motion.div>
@@ -52,23 +78,14 @@ function TiltCard({ project, index }: { project: Project; index: number }) {
 
 export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
-  // 🚀 Hydration এরর ফিক্সের জাদুকরী স্টেট: যতক্ষণ না ক্লায়েন্ট সাইড লোড হবে, এটি false থাকবে
-  const [isMounted, setIsMounted] = useState(false);
 
   useEffect(() => {
-    setIsMounted(true); // কম্পোনেন্ট মাউন্ট হওয়া মাত্রই এটা true হবে
+    // সরাসরি রেন্ডারের লাইভ এপিআই ইউআরএল হার্ডকোড করে দেওয়া হলো
     fetch("https://ifteakar-portfolio-backend.onrender.com/api/v1/projects")
       .then((res) => res.json())
-      .then((data) => {
-        if (Array.isArray(data)) setProjects(data);
-        else if (data.data && Array.isArray(data.data)) setProjects(data.data);
-        else if (data.content && Array.isArray(data.content)) setProjects(data.content);
-      })
+      .then((data) => setProjects(data))
       .catch((err) => console.error("Error loading projects:", err));
   }, []);
-
-  // যতক্ষণ না ক্লায়েন্ট সাইডে মাউন্ট হচ্ছে, ততক্ষণ রেন্ডার করবে না (এতে রিঅ্যাক্ট এরর দিবে না)
-  if (!isMounted) return <section id="work" className="py-32" />;
 
   return (
     <section id="work" className="relative py-32 px-6 md:px-12 max-w-7xl mx-auto">
@@ -86,17 +103,14 @@ export function Projects() {
         variants={staggerContainer}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, margin: "0px" }}
-        className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        viewport={{ once: false, margin: "-100px", amount: 0.15 }}
+        className="grid md:grid-cols-2 gap-8"
       >
         {projects.map((p, i) => (
-          <TiltCard key={p.id || i} project={p} index={i} />
+          <TiltCard key={p.id} project={p} index={i} />
         ))}
       </motion.div>
-
-      <div className="mt-24">
-        <ArchitectureDiagram />
-      </div>
+      <ArchitectureDiagram />
     </section>
   );
 }
