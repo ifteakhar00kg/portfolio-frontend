@@ -14,18 +14,26 @@ import { CodeRainBackground } from "@/components/CodeRainBackground";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      // টাইটেল বদলে ডটসহ Ifteakar. করা হলো
+      // টাইটেল ডটসহ Ifteakar.
       { title: "Ifteakar." },
       {
         name: "description",
         content:
           "Portfolio of Ifteakar Ahmed, backend developer and AI integration enthusiast based in Dhaka building scalable APIs and intelligent web apps.",
       },
-      // ওপেন গ্রাফ (OG) টাইটেলও আপডেট করা হলো
+      // ওপেন গ্রাফ (OG) টাইটেল
       { property: "og:title", content: "Ifteakar." },
       {
         property: "og:description",
         content: "Backend Developer & AI Integration Enthusiast based in Dhaka.",
+      },
+    ],
+    // 🔗 এখানে সরাসরি লিঙ্কের ভেতর কাস্টম মাউস কার্সর আইকন জুড়ে দেওয়া হলো
+    links: [
+      {
+        rel: "icon",
+        type: "image/x-icon",
+        href: "/favicon.ico?v=3", // ?v=3 ব্রাউজারকে বাধ্য করবে নতুন কার্সর আইকনটি লোড করতে
       },
     ],
   }),
