@@ -77,14 +77,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1" },
-      { title: "Lovable App" },
-      { name: "description", content: "Lovable Generated Project" },
-      { name: "author", content: "Lovable" },
-      { property: "og:title", content: "Lovable App" },
-      { property: "og:description", content: "Lovable Generated Project" },
+      // ট্যাবের নাম পরিবর্তন করে ডটসহ "Ifteakar." করা হলো
+      { title: "Ifteakar." },
+      { name: "description", content: "Khandokar Ifteakar Ahmed - Portfolio" },
+      { name: "author", content: "Ifteakar" },
+      { property: "og:title", content: "Ifteakar." },
+      { property: "og:description", content: "Khandokar Ifteakar Ahmed - Portfolio" },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary" },
-      { name: "twitter:site", content: "@Lovable" },
     ],
     links: [
       {
@@ -103,6 +103,12 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
       {
         rel: "stylesheet",
         href: appCss,
+      },
+      // এখানে আপনার কাস্টম মাউস কার্সর (Favicon) আইকনটি লিঙ্ক করে দেওয়া হলো
+      {
+        rel: "icon",
+        type: "image/x-icon",
+        href: "/favicon.ico",
       },
     ],
   }),
