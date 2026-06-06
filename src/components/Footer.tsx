@@ -41,10 +41,10 @@ export function Footer() {
             className="text-center md:text-right"
           >
             <a
-              href="mailto:ifteakarahmed.kg@gmail.com"
+              href="mailto:contact@ifteakar.dev"
               className="text-sm text-muted-foreground transition-colors hover:text-primary"
             >
-              ifteakarahmed.kg@gmail.com
+              contact@ifteakar.dev
             </a>
             <p className="mt-1 text-xs text-muted-foreground/60">
               © {new Date().getFullYear()} Khandokar Ifteakar Ahmed. All rights reserved.
