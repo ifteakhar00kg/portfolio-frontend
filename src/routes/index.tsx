@@ -14,13 +14,15 @@ import { CodeRainBackground } from "@/components/CodeRainBackground";
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
-      { title: "Ifteakar Ahmed — Backend Developer & AI Integration" },
+      // টাইটেল বদলে ডটসহ Ifteakar. করা হলো
+      { title: "Ifteakar." },
       {
         name: "description",
         content:
           "Portfolio of Ifteakar Ahmed, backend developer and AI integration enthusiast based in Dhaka building scalable APIs and intelligent web apps.",
       },
-      { property: "og:title", content: "Ifteakar Ahmed — Portfolio" },
+      // ওপেন গ্রাফ (OG) টাইটেলও আপডেট করা হলো
+      { property: "og:title", content: "Ifteakar." },
       {
         property: "og:description",
         content: "Backend Developer & AI Integration Enthusiast based in Dhaka.",
