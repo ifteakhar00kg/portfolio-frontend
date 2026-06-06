@@ -53,11 +53,11 @@ function TiltCard({ project, index }: { project: Project; index: number }) {
           </h3>
           <p className="text-foreground/70 mb-8 leading-relaxed">{project.description}</p>
           <div className="flex flex-wrap gap-2 mb-8">
-            {project.technologies?.split(",").map((s) => (
+            {project.technologies ? project.technologies.split(",").map((s) => (
               <span key={s} className="px-3 py-1 rounded-full border border-foreground/10 text-xs text-foreground/70">
                 {s.trim()}
               </span>
-            ))}
+            )) : null}
           </div>
           <div className="mt-auto">
             <a
@@ -78,12 +78,10 @@ function TiltCard({ project, index }: { project: Project; index: number }) {
 export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
-  // আপনার আগের অরিজিনাল ফেচিং লজিক, কোনো হিডেন ট্রিক ছাড়া
   useEffect(() => {
     fetch("https://ifteakar-portfolio-backend.onrender.com/api/v1/projects")
       .then((res) => res.json())
       .then((data) => {
-        // স্প্রিংবুট অনেক সময় অ্যারে না দিয়ে অবজেক্ট পাঠায়, সেটার জন্য সেফটি চেক
         if (Array.isArray(data)) {
           setProjects(data);
         } else if (data.data && Array.isArray(data.data)) {
@@ -107,19 +105,23 @@ export function Projects() {
         </div>
       </StaggerGroup>
       
-      <motion.div
-        variants={staggerContainer}
-        initial="hidden"
-        whileInView="show"
-        // 🚀 মোবাইলের জন্য শুধু জিরো মার্জিন দেওয়া হলো, যেন আটকে না থাকে
-        viewport={{ once: true, margin: "0px", amount: 0 }}
-        // 🚀 মোবাইলে এক লাইনে (grid-cols-1) আর ল্যাপটপে দুই লাইনে (md:grid-cols-2) কার্ড দেখাবে
-        className="grid grid-cols-1 md:grid-cols-2 gap-8"
-      >
-        {projects.map((p, i) => (
-          <TiltCard key={p.id || i} project={p} index={i} />
-        ))}
-      </motion.div>
+      {/* 🚀 জাদুকরী শর্ত: ডেটা না আসা পর্যন্ত কন্টেইনার মাউন্টই হবে না, তাই অ্যানিমেশন মিস হওয়ার কোনো চান্স নেই! */}
+      {projects.length > 0 ? (
+        <motion.div
+          variants={staggerContainer}
+          initial="hidden"
+          whileInView="show"
+          viewport={{ once: true, margin: "0px" }}
+          className="grid grid-cols-1 md:grid-cols-2 gap-8"
+        >
+          {projects.map((p, i) => (
+            <TiltCard key={p.id || i} project={p} index={i} />
+          ))}
+        </motion.div>
+      ) : (
+        // ডেটা লোড হওয়ার আগ পর্যন্ত স্পেস ধরে রাখার জন্য অদৃশ্য বক্স
+        <div className="min-h-[400px] w-full" />
+      )}
 
       <div className="mt-24">
         <ArchitectureDiagram />
