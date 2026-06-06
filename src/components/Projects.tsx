@@ -53,11 +53,11 @@ function TiltCard({ project, index }: { project: Project; index: number }) {
           </h3>
           <p className="text-foreground/70 mb-8 leading-relaxed">{project.description}</p>
           <div className="flex flex-wrap gap-2 mb-8">
-            {project.technologies ? project.technologies.split(",").map((s) => (
+            {project.technologies?.split(",").map((s) => (
               <span key={s} className="px-3 py-1 rounded-full border border-foreground/10 text-xs text-foreground/70">
                 {s.trim()}
               </span>
-            )) : null}
+            ))}
           </div>
           <div className="mt-auto">
             <a
@@ -105,23 +105,20 @@ export function Projects() {
         </div>
       </StaggerGroup>
       
-      {/* 🚀 জাদুকরী শর্ত: ডেটা না আসা পর্যন্ত কন্টেইনার মাউন্টই হবে না, তাই অ্যানিমেশন মিস হওয়ার কোনো চান্স নেই! */}
-      {projects.length > 0 ? (
-        <motion.div
-          variants={staggerContainer}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, margin: "0px" }}
-          className="grid grid-cols-1 md:grid-cols-2 gap-8"
-        >
-          {projects.map((p, i) => (
-            <TiltCard key={p.id || i} project={p} index={i} />
-          ))}
-        </motion.div>
-      ) : (
-        // ডেটা লোড হওয়ার আগ পর্যন্ত স্পেস ধরে রাখার জন্য অদৃশ্য বক্স
-        <div className="min-h-[400px] w-full" />
-      )}
+      <motion.div
+        variants={staggerContainer}
+        initial="hidden"
+        whileInView="show"
+        // 🚀 once: false ফিরিয়ে আনা হলো (যাতে ডেটা আসলে বা স্ক্রল করলে আবার শো করে) 
+        // 🚀 margin: "0px" দেওয়া হলো যাতে মোবাইলে আটকে না থাকে
+        viewport={{ once: false, margin: "0px", amount: 0.1 }}
+        // 🚀 মোবাইলে grid-cols-1 কাজ করার জন্য ক্লাস অ্যাড করা হলো
+        className="grid grid-cols-1 md:grid-cols-2 gap-8"
+      >
+        {projects.map((p, i) => (
+          <TiltCard key={p.id || i} project={p} index={i} />
+        ))}
+      </motion.div>
 
       <div className="mt-24">
         <ArchitectureDiagram />
