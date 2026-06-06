@@ -13,9 +13,18 @@ export default defineConfig({
       entry: "server"
     },
   },
-  // Lovable কনফিগারেশনের ভেতরে নাইট্রো ইঞ্জিনকে VercelPreset চেনার জন্য এই রুল দিতে হবে
+  // 🚀 Nitro Server-কে আপনার দেওয়া লোকাল /favicon.png পাথটি পারফেক্টলি চিনিয়ে দেওয়া হলো
   nitro: {
-    preset: "vercel"
+    preset: "vercel",
+    head: {
+      link: [
+        {
+          rel: "icon",
+          type: "image/png",
+          href: "/favicon.png"
+        }
+      ]
+    }
   },
   vite: {
     server: {
