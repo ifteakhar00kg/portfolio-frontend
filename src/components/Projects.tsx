@@ -3,7 +3,6 @@ import { useRef, MouseEvent, useEffect, useState } from "react";
 import { ArrowUpRight } from "lucide-react";
 import { ArchitectureDiagram } from "./ArchitectureDiagram";
 import { RevealText, StaggerGroup, StaggerItem, staggerContainer, staggerItem } from "./Reveal";
-import { LoopingTypewriter } from "./LoopingTypewriter";
 
 interface Project {
   id: number;
@@ -54,7 +53,7 @@ function TiltCard({ project, index }: { project: Project; index: number }) {
           </h3>
           <p className="text-foreground/70 mb-8 leading-relaxed">{project.description}</p>
           <div className="flex flex-wrap gap-2 mb-8">
-            {project.technologies.split(",").map((s) => (
+            {project.technologies?.split(",").map((s) => (
               <span key={s} className="px-3 py-1 rounded-full border border-foreground/10 text-xs text-foreground/70">
                 {s.trim()}
               </span>
@@ -79,10 +78,20 @@ function TiltCard({ project, index }: { project: Project; index: number }) {
 export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
+  // আপনার আগের অরিজিনাল ফেচিং লজিক, কোনো হিডেন ট্রিক ছাড়া
   useEffect(() => {
     fetch("https://ifteakar-portfolio-backend.onrender.com/api/v1/projects")
       .then((res) => res.json())
-      .then((data) => setProjects(data))
+      .then((data) => {
+        // স্প্রিংবুট অনেক সময় অ্যারে না দিয়ে অবজেক্ট পাঠায়, সেটার জন্য সেফটি চেক
+        if (Array.isArray(data)) {
+          setProjects(data);
+        } else if (data.data && Array.isArray(data.data)) {
+          setProjects(data.data);
+        } else if (data.content && Array.isArray(data.content)) { 
+          setProjects(data.content);
+        }
+      })
       .catch((err) => console.error("Error loading projects:", err));
   }, []);
 
@@ -102,16 +111,19 @@ export function Projects() {
         variants={staggerContainer}
         initial="hidden"
         whileInView="show"
-        // 🚀 মোবাইলের জন্য ভিউপোর্ট ট্রিগার একদম স্মুথ করে দেওয়া হলো
-        viewport={{ once: true, margin: "0px", amount: 0.1 }}
-        // 🚀 মোবাইলে grid-cols-1 কাজ করার জন্য ক্লাস অ্যাড করা হলো
+        // 🚀 মোবাইলের জন্য শুধু জিরো মার্জিন দেওয়া হলো, যেন আটকে না থাকে
+        viewport={{ once: true, margin: "0px", amount: 0 }}
+        // 🚀 মোবাইলে এক লাইনে (grid-cols-1) আর ল্যাপটপে দুই লাইনে (md:grid-cols-2) কার্ড দেখাবে
         className="grid grid-cols-1 md:grid-cols-2 gap-8"
       >
         {projects.map((p, i) => (
-          <TiltCard key={p.id} project={p} index={i} />
+          <TiltCard key={p.id || i} project={p} index={i} />
         ))}
       </motion.div>
-      <ArchitectureDiagram />
+
+      <div className="mt-24">
+        <ArchitectureDiagram />
+      </div>
     </section>
   );
 }
