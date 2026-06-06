@@ -80,7 +80,6 @@ export function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
 
   useEffect(() => {
-    // সরাসরি রেন্ডারের লাইভ এপিআই ইউআরএল হার্ডকোড করে দেওয়া হলো
     fetch("https://ifteakar-portfolio-backend.onrender.com/api/v1/projects")
       .then((res) => res.json())
       .then((data) => setProjects(data))
@@ -103,8 +102,10 @@ export function Projects() {
         variants={staggerContainer}
         initial="hidden"
         whileInView="show"
-        viewport={{ once: false, margin: "-100px", amount: 0.15 }}
-        className="grid md:grid-cols-2 gap-8"
+        // 🚀 মোবাইলের জন্য ভিউপোর্ট ট্রিগার একদম স্মুথ করে দেওয়া হলো
+        viewport={{ once: true, margin: "0px", amount: 0.1 }}
+        // 🚀 মোবাইলে grid-cols-1 কাজ করার জন্য ক্লাস অ্যাড করা হলো
+        className="grid grid-cols-1 md:grid-cols-2 gap-8"
       >
         {projects.map((p, i) => (
           <TiltCard key={p.id} project={p} index={i} />
