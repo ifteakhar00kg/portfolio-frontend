@@ -108,6 +108,8 @@
 
   html {
     font-family: var(--font-body);
+    /* মোবাইলের রাবার-ব্যান্ড স্ক্রলিং বা বাউন্সিং ইফেক্ট বন্ধ করার জন্য */
+    overscroll-behavior-y: none;
   }
 
   body {
@@ -158,5 +160,20 @@
     background-image: radial-gradient(oklch(1 0 0 / 0.03) 1px, transparent 1px);
     background-size: 3px 3px;
     pointer-events: none;
+  }
+
+  /* * 📱 মোবাইল স্ক্রল ফিক্স হ্যাক: 
+   * মোবাইলে ব্যাকগ্রাউন্ডের কোড রেইনের লাফালাফি এবং কাঁপাকাঁপি বন্ধ করার জন্য জাদুকরী মিডিয়া কুয়েরি
+   */
+  @media (max-width: 768px) {
+    /* কোড রেইন ক্যানভাস বা ফিক্সড এলিমেন্টকে স্ক্রলের সাথে লক করে দেওয়া হলো */
+    canvas, 
+    .fixed,
+    [class*="CodeRain"],
+    [class*="bg-fixed"] {
+      position: absolute !important;
+      height: 100% !important;
+      overflow: hidden;
+    }
   }
 }
